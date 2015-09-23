@@ -39,8 +39,6 @@ public class GUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        seqInput.setText(" gagttttatc gcttccatga cgcagaagtt aacactttcg gatatttctg atgagtcgaa aaattatctt gataaagcag gaattactac tgcttgttta cgaattaaat cgaagtggac tgctggcgga aaatgagaaa attcgaccta tccttgcgca gctcgagaag ctcttacttt");
-
         promptLab.setText("Input a DNA sequence:");
 
         clearOutputBut.setText("Clear Output");
@@ -199,17 +197,17 @@ public class GUI extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_quitButActionPerformed
 
-    private void clearOutputButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearOutputButActionPerformed
-        output.setText("");
-    }//GEN-LAST:event_clearOutputButActionPerformed
+    private void clearInputButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearInputButActionPerformed
+        seqInput.setText("");
+    }//GEN-LAST:event_clearInputButActionPerformed
 
     private void runButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButActionPerformed
         Driver.driver();
     }//GEN-LAST:event_runButActionPerformed
 
-    private void clearInputButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearInputButActionPerformed
-        seqInput.setText("");
-    }//GEN-LAST:event_clearInputButActionPerformed
+    private void clearOutputButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearOutputButActionPerformed
+        output.setText("");
+    }//GEN-LAST:event_clearOutputButActionPerformed
 
     public static boolean isStrandButChecked() {
         return strandBut.isSelected();
@@ -237,6 +235,22 @@ public class GUI extends javax.swing.JFrame {
         } else {
             return null;
         }
+    }
+    
+    public static String getResEnzBut() {
+       if(BamHIBut.isSelected()) {
+            return "BamHI";
+        } else if(EcoRIBut.isSelected()) {
+            return "EcoRI";
+        } else if(HaeIIIBut.isSelected()) {
+            return "HaeIII";
+        } else if(HindIIIBut.isSelected()) {
+            return "HindIII";
+        } else if(aluiBut.isSelected()) {
+            return "Alui";
+        } else {
+            return null;
+        } 
     }
     
     public static boolean isResEnzChecked() {
