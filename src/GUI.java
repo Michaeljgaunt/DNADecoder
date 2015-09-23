@@ -239,6 +239,22 @@ public class GUI extends javax.swing.JFrame {
         }
     }
     
+    public static String getResEnzBut() {
+       if(BamHIBut.isSelected()) {
+            return "BamHI";
+        } else if(EcoRIBut.isSelected()) {
+            return "EcoRI";
+        } else if(HaeIIIBut.isSelected()) {
+            return "HaeIII";
+        } else if(HindIIIBut.isSelected()) {
+            return "HindIII";
+        } else if(aluiBut.isSelected()) {
+            return "Alui";
+        } else {
+            return null;
+        } 
+    }
+    
     public static boolean isResEnzChecked() {
         return !noneBut.isSelected();  
     }

@@ -24,7 +24,8 @@ public class Driver {
         }
         
         if(enzFlag) {
-            DNAStrand.printFragments(GUI.getCleavage());
+            DNAStrand.getFragments(GUI.getCleavage());
+            DNAStrand.printFragments();
         }
         
         if((!strandFlag && !codFlag && !enzFlag) && (DNAStrand.getStrandValidity())) {

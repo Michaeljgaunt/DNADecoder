@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -11,8 +12,11 @@ public class DNA {
     private static String[] codonSequence2;
     private static String[] acidSequence1;
     private static String[] acidSequence2;
-    public static boolean validFlag;
-    
+    public static boolean validFlag;    
+    private static ArrayList primaryFragments = new ArrayList();
+    private static ArrayList secondaryFragments = new ArrayList();
+    private static ArrayList primaryFragmentCodons = new ArrayList();
+    private static ArrayList secondaryFragmentCodons = new ArrayList();
     Protein protein;
     
     public DNA(String sequence) {
@@ -196,10 +200,14 @@ public class DNA {
             }
             System.out.print("       ");
             System.out.println();
+            System.out.println();
         }
     }
     
-    public void printFragments(RestrictionSequence resSeq) {        
+    public void getFragments(RestrictionSequence resSeq) {        
+        primaryFragments.clear();
+        secondaryFragments.clear();
+        
         StringBuilder nucSeq1StrB = new StringBuilder();
         for(char nucleotide : nucleotideSequence1) {
             nucSeq1StrB.append(nucleotide);
@@ -213,13 +221,62 @@ public class DNA {
         String nucSeq1Str = nucSeq1StrB.toString();
         String nucSeq2Str = nucSeq2StrB.toString();
         
-        int firstOcc = nucSeq1Str.indexOf(resSeq.getResSeq());
-        int firstCutPoint = firstOcc + resSeq.getPrimaryCutIndex();
-        System.out.println("cut point: " + firstCutPoint);
-        int secondCutPoint = firstOcc + resSeq.getSecondaryCutIndex();
-        
-        String[] fragments1 = new String[nucSeq1Str.length()];
-        String[] fragments2 = new String[nucSeq1Str.length()];
+        Object[] occArr1 = getCuts(resSeq, nucSeq1Str, true);
+        Object[] occArr2 = getCuts(resSeq, nucSeq2Str, false);
+       
+        int numFrags = occArr1.length + 1;
+        if (numFrags == 1) {
+            System.out.println("\n       " + GUI.getResEnzBut() + " will have no effect on this DNA sequence. The recognition site is not present.");
+        } else {   
+            for (int i = 0; i < numFrags; i++) {
+                if (i == 0) {
+                    primaryFragments.add(nucSeq1Str.substring(0, (int)occArr1[i]));
+                    secondaryFragments.add(nucSeq2Str.substring(0, (int)occArr2[i]));
+                } else if (i == (numFrags - 1)) {
+                    primaryFragments.add(nucSeq1Str.substring((int)occArr1[i - 1], nucSeq1Str.length()));
+                    secondaryFragments.add(nucSeq2Str.substring((int)occArr2[i - 1], nucSeq1Str.length()));
+                } else {
+                    primaryFragments.add(nucSeq1Str.substring((int)occArr1[i - 1], (int)occArr1[i]));
+                    secondaryFragments.add(nucSeq2Str.substring((int)occArr2[i - 1], (int)occArr2[i]));
+                }
+            }
+        }
     }
+        
+    public void printFragments() {
+        if(primaryFragments.isEmpty())
+            return;
+        System.out.println("\n       Cutting DNA using " + GUI.getResEnzBut() + ".");
+        System.out.println("       Primary strand fragments:");
+        primaryFragments.stream().forEach((primaryFragment) -> {
+            System.out.println("       " + primaryFragment);
+        });
+        System.out.println();
+        System.out.println("\n       Secondary strand fragments:");
+        secondaryFragments.stream().forEach((secondaryFragment) -> {
+            System.out.println("       " + secondaryFragment);
+        });
+        System.out.println();
+        System.out.println();
+    }
+    
+    private Object[] getCuts(RestrictionSequence resSeq, String strand, boolean primary) {
+        ArrayList cutArr = new ArrayList();
+        if (primary) {
+            int occIndex = strand.indexOf(resSeq.getPriResSeq());
+            while (occIndex >= 0) {
+                cutArr.add(occIndex + resSeq.getPrimaryCutIndex());
+                occIndex = strand.indexOf(resSeq.getPriResSeq(), (occIndex + 1));
+            }
+        } else {
+            int occIndex = strand.indexOf(resSeq.getSecResSeq());
+            while (occIndex >= 0) {
+                cutArr.add(occIndex + resSeq.getSecondaryCutIndex());
+                occIndex = strand.indexOf(resSeq.getSecResSeq(), (occIndex + 1));
+            }   
+        }        
+        return cutArr.toArray();
+    }
+            
     
 }
