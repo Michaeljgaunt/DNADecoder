@@ -246,16 +246,33 @@ public class DNA {
     public void printFragments() {
         if(primaryFragments.isEmpty())
             return;
-        System.out.println("\n       Cutting DNA using " + GUI.getResEnzBut() + ".");
-        System.out.println("       Primary strand fragments:");
-        primaryFragments.stream().forEach((primaryFragment) -> {
-            System.out.println("       " + primaryFragment);
-        });
+        System.out.println("\n       Primary strand fragments (" + GUI.getResEnzBut() + "):");
+        for (int i = 0; i < primaryFragments.size(); i++) {
+            System.out.println("\n       Fragment " + (i + 1));
+            char[] fragChars = primaryFragments.get(i).toString().toCharArray();
+            System.out.print("       ");
+            for (int j = 0; j < fragChars.length; j++) {
+                if(j % 80 == 0 && j != 0) {
+                    System.out.print("\n       ");
+                }
+                System.out.print(fragChars[j] + " ");
+            }
+            System.out.println();
+        }
         System.out.println();
-        System.out.println("\n       Secondary strand fragments:");
-        secondaryFragments.stream().forEach((secondaryFragment) -> {
-            System.out.println("       " + secondaryFragment);
-        });
+        System.out.println("\n       Secondary strand fragments (" + GUI.getResEnzBut() + "):");
+        for (int i = 0; i < secondaryFragments.size(); i++) {
+            System.out.println("\n       Fragment " + (i + 1));
+            char[] fragChars = secondaryFragments.get(i).toString().toCharArray();
+            System.out.print("       ");
+            for (int j = 0; j < fragChars.length; j++) {
+                if(j % 80 == 0 && j != 0) {
+                    System.out.print("\n       ");
+                }
+                System.out.print(fragChars[j] + " ");
+            }
+            System.out.println();
+        }
         System.out.println();
         System.out.println();
     }
