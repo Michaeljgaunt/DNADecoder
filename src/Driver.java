@@ -11,18 +11,23 @@ public class Driver {
         
         boolean strandFlag = GUI.isStrandButChecked();
         boolean codFlag = GUI.isCodButChecked();
+        boolean enzFlag = GUI.isResEnzChecked();
         
-        DNA strand = new DNA(GUI.getSequence());
+        DNA DNAStrand = new DNA(GUI.getSequence());
         
         if(strandFlag) {
-            strand.printDNA();
+            DNAStrand.printDNA();
         }
         
         if(codFlag) {
-            strand.printCodons();
+            DNAStrand.printCodons();
         }
         
-        if(!strandFlag && !codFlag) {
+        if(enzFlag) {
+            DNAStrand.printFragments(GUI.getCleavage());
+        }
+        
+        if((!strandFlag && !codFlag && !enzFlag) && (DNAStrand.getStrandValidity())) {
             System.err.print("\n  No functions have been selected. Select a funciton using the menu at the top of the window.");
         }
         

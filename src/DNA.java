@@ -32,9 +32,16 @@ public class DNA {
         if (!sequence.matches("[ATGC]+")) {
             System.err.println("  Invalid input detected. DNA can only contain A, T, C or G nucleotides.");
             validFlag = false;
+        } else if (sequence.length() % 3 != 0) {
+            System.err.println("  Invalid input detected. The DNA strand length must be divisible by 3.");
+            validFlag = false;
         } else {
             validFlag = true;
         }
+    }
+    
+    public boolean getStrandValidity() {
+        return validFlag;
     }
     
     private static void generateComplementaryStrand() {
@@ -59,24 +66,24 @@ public class DNA {
     
     public void printDNA() {
         if(validFlag) {
-            System.out.println("\n  DNA sequence: ");
-            System.out.print("  5' -   ");
+            System.out.println("\n       Input strand: ");
+            System.out.print("       ");
             for(int i = 0; i < nucleotideSequence1.length; i++) {
                 if(i % 80 == 0 && i != 0) {
                     System.out.print("\n       ");
                 }
                 System.out.print(nucleotideSequence1[i] + " ");
             }
-            System.out.print("     - 3'");
             System.out.println();
-            System.out.print("\n  3' -   ");
+            System.out.println("\n       Complementary strand:");
+            System.out.print("       ");
             for(int i = 0; i < nucleotideSequence2.length; i++) {
                 if(i % 80 == 0 && i != 0) {
                     System.out.print("\n       ");
                 }
                 System.out.print(nucleotideSequence2[i] + " ");
             }
-            System.out.print("     - 5'");
+            System.out.println();
             System.out.println();
         }
     }
@@ -131,48 +138,88 @@ public class DNA {
     
     public void printCodons() { 
         if(validFlag) {
-            System.out.println("\n  Primary Strand codons: ");
-            System.out.print("  5' -   ");
+            System.out.println("\n       Primary Strand codons: ");
+            System.out.print("       ");
             for(int i = 0; i < codonSequence1.length; i++) {
-                if(i % 32 == 0 && i != 0) {
-                    System.out.print("\n      ");
+                if(i % 25 == 0 && i != 0) {
+                    System.out.print("\n       ");
                 }
-                System.out.print(codonSequence1[i] + " ");
+                if(i == (codonSequence1.length - 1)) {
+                    System.out.print(codonSequence1[i]);
+                } else {
+                System.out.print(codonSequence1[i] + " - ");
+                }
             }
-            System.out.print("   - 3'");
+            System.out.print("       ");
             System.out.println();
-            System.out.println("\n  Primary strand amino acid sequence: ");
-            System.out.print("  5' -   ");
+            System.out.println("\n       Primary strand amino acid sequence: ");
+            System.out.print("       ");
             for(int i = 0; i < acidSequence1.length; i++) {
-                if(i % 32 == 0 && i != 0) {
-                    System.out.print("\n      ");
+                if(i % 27 == 0 && i != 0) {
+                    System.out.print("\n       ");
                 }
-                System.out.print(acidSequence1[i] + " ");
+                if(i == (acidSequence1.length - 1)) {
+                    System.out.print(acidSequence1[i]);
+                } else {
+                System.out.print(acidSequence1[i] + " - ");
+                }
             }
-            System.out.print("   - 3'");
+            System.out.print("       ");
+            System.out.println();
             System.out.println();
 
-            System.out.println("\n  Secondary Strand codons: ");
-            System.out.print("  3' -   ");
+            System.out.println("\n       Secondary Strand codons: ");
+            System.out.print("       ");
             for(int i = 0; i < codonSequence2.length; i++) {
-                if(i % 32 == 0 && i != 0) {
-                    System.out.print("\n      ");
+                if(i % 25 == 0 && i != 0) {
+                    System.out.print("\n       ");
                 }
-                System.out.print(codonSequence2[i] + " ");
+                if(i == (codonSequence2.length - 1)) {
+                    System.out.print(codonSequence2[i]);
+                } else {
+                System.out.print(codonSequence2[i] + " - ");
+                }
             }
-            System.out.print("   - 5'");
+            System.out.print("       ");
             System.out.println();
-            System.out.println("\n  Secondary strand amino acid sequence: ");
-            System.out.print("  3' -   ");
+            System.out.println("\n       Secondary strand amino acid sequence: ");
+            System.out.print("       ");
             for(int i = 0; i < acidSequence2.length; i++) {
-                if(i % 32 == 0 && i != 0) {
-                    System.out.print("\n      ");
+                if(i % 27 == 0 && i != 0) {
+                    System.out.print("\n       ");
                 }
-                System.out.print(acidSequence2[i] + " ");
+                if(i == (acidSequence2.length - 1)) {
+                    System.out.print(acidSequence2[i]);
+                } else {
+                System.out.print(acidSequence2[i] + " - ");
+                }
             }
-            System.out.print("   - 5'");
+            System.out.print("       ");
             System.out.println();
         }
+    }
+    
+    public void printFragments(RestrictionSequence resSeq) {        
+        StringBuilder nucSeq1StrB = new StringBuilder();
+        for(char nucleotide : nucleotideSequence1) {
+            nucSeq1StrB.append(nucleotide);
+        }
+        
+        StringBuilder nucSeq2StrB = new StringBuilder();
+        for(char nucleotide : nucleotideSequence2) {
+            nucSeq2StrB.append(nucleotide);
+        }
+        
+        String nucSeq1Str = nucSeq1StrB.toString();
+        String nucSeq2Str = nucSeq2StrB.toString();
+        
+        int firstOcc = nucSeq1Str.indexOf(resSeq.getResSeq());
+        int firstCutPoint = firstOcc + resSeq.getPrimaryCutIndex();
+        System.out.println("cut point: " + firstCutPoint);
+        int secondCutPoint = firstOcc + resSeq.getSecondaryCutIndex();
+        
+        String[] fragments1 = new String[nucSeq1Str.length()];
+        String[] fragments2 = new String[nucSeq1Str.length()];
     }
     
 }
